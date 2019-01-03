@@ -201,6 +201,7 @@ inline void print_device_info(int device_id__)
     printf("  totalGlobalMem                   : %li kB\n",   devprop.totalGlobalMem >> 10);
     printf("  available memory                 : %li kB\n",   get_free_mem() >> 10);
     printf("  l2CacheSize                      : %i kB\n",    devprop.l2CacheSize >> 10);
+    printf("  warpSize                         : %i\n",       devprop.warpSize);
     printf("  regsPerBlock                     : %i\n",       devprop.regsPerBlock);
     printf("  regsPerMultiprocessor            : %i\n",       devprop.regsPerMultiprocessor);
     printf("  asyncEngineCount                 : %i\n" ,      devprop.asyncEngineCount);
@@ -213,8 +214,6 @@ inline void print_device_info(int device_id__)
     printf("  maxThreadsPerMultiProcessor      : %i\n",       devprop.maxThreadsPerMultiProcessor);
     printf("  memPitch                         : %li\n",      devprop.memPitch);
     printf("  multiProcessorCount              : %i\n",       devprop.multiProcessorCount);
-    printf("  regsPerBlock                     : %i\n",       devprop.regsPerBlock);
-    printf("  warpSize                         : %i\n",       devprop.warpSize);
     printf("  pciBusID                         : %i\n",       devprop.pciBusID);
     printf("  pciDeviceID                      : %i\n",       devprop.pciDeviceID);
     printf("  pciDomainID                      : %i\n",       devprop.pciDomainID);
