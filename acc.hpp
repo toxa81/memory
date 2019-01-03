@@ -140,7 +140,7 @@ inline std::vector<cudaStream_t>& streams()
 /// Return a single CUDA stream.
 inline cudaStream_t stream(stream_id sid__)
 {
-    return (sid__.id() == -1) ? NULL : streams()[sid__.id()];
+    return (sid__() == -1) ? NULL : streams()[sid__()];
 }
 
 /// Reset device.
@@ -180,28 +180,40 @@ inline void print_device_info(int device_id__)
 
     CALL_CUDA(cudaGetDeviceProperties, (&devprop, device_id__));
 
-    printf("  name                             : %s \n",       devprop.name);
-    printf("  major                            : %i \n",       devprop.major);
-    printf("  minor                            : %i \n",       devprop.minor);
-    printf("  asyncEngineCount                 : %i \n",       devprop.asyncEngineCount);
-    printf("  canMapHostMemory                 : %i \n",       devprop.canMapHostMemory);
-    printf("  clockRate                        : %i kHz \n",   devprop.clockRate);
-    printf("  concurrentKernels                : %i \n",       devprop.concurrentKernels);
-    printf("  ECCEnabled                       : %i \n",       devprop.ECCEnabled);
-    printf("  l2CacheSize                      : %i kB \n",    devprop.l2CacheSize >> 10);
-    printf("  maxGridSize                      : %i %i %i \n", devprop.maxGridSize[0], devprop.maxGridSize[1], devprop.maxGridSize[2]);
-    printf("  maxThreadsDim                    : %i %i %i \n", devprop.maxThreadsDim[0], devprop.maxThreadsDim[1], devprop.maxThreadsDim[2]);
-    printf("  maxThreadsPerBlock               : %i \n",       devprop.maxThreadsPerBlock);
-    printf("  maxThreadsPerMultiProcessor      : %i \n",       devprop.maxThreadsPerMultiProcessor);
-    printf("  memoryBusWidth                   : %i bits \n",  devprop.memoryBusWidth);
-    printf("  memoryClockRate                  : %i kHz \n",   devprop.memoryClockRate);
-    printf("  memPitch                         : %zi \n",      devprop.memPitch);
-    printf("  multiProcessorCount              : %i \n",       devprop.multiProcessorCount);
-    printf("  regsPerBlock                     : %i \n",       devprop.regsPerBlock);
-    printf("  sharedMemPerBlock                : %li kB \n",   devprop.sharedMemPerBlock >> 10);
-    printf("  totalConstMem                    : %li kB \n",   devprop.totalConstMem >> 10);
-    printf("  totalGlobalMem                   : %li kB \n",   devprop.totalGlobalMem >> 10);
-    printf("  available memory                 : %li kB \n",   get_free_mem() >> 10);
+    printf("  name                             : %s\n",       devprop.name);
+    printf("  major                            : %i\n",       devprop.major);
+    printf("  minor                            : %i\n",       devprop.minor);
+    printf("  clockRate                        : %i kHz\n",   devprop.clockRate);
+    printf("  memoryClockRate                  : %i kHz\n",   devprop.memoryClockRate);
+    printf("  memoryBusWidth                   : %i bits\n",  devprop.memoryBusWidth);
+    printf("  sharedMemPerBlock                : %li kB\n",   devprop.sharedMemPerBlock >> 10);
+    printf("  totalConstMem                    : %li kB\n",   devprop.totalConstMem >> 10);
+    printf("  totalGlobalMem                   : %li kB\n",   devprop.totalGlobalMem >> 10);
+    printf("  available memory                 : %li kB\n",   get_free_mem() >> 10);
+    printf("  l2CacheSize                      : %i kB\n",    devprop.l2CacheSize >> 10);
+    printf("  regsPerBlock                     : %i\n",       devprop.regsPerBlock);
+    printf("  regsPerMultiprocessor            : %i\n",       devprop.regsPerMultiprocessor);
+    printf("  asyncEngineCount                 : %i\n" ,      devprop.asyncEngineCount);
+    printf("  canMapHostMemory                 : %i\n",       devprop.canMapHostMemory);
+    printf("  concurrentKernels                : %i\n",       devprop.concurrentKernels);
+    printf("  ECCEnabled                       : %i\n",       devprop.ECCEnabled);
+    printf("  maxGridSize                      : %i %i %i\n", devprop.maxGridSize[0], devprop.maxGridSize[1], devprop.maxGridSize[2]);
+    printf("  maxThreadsDim                    : %i %i %i\n", devprop.maxThreadsDim[0], devprop.maxThreadsDim[1], devprop.maxThreadsDim[2]);
+    printf("  maxThreadsPerBlock               : %i\n",       devprop.maxThreadsPerBlock);
+    printf("  maxThreadsPerMultiProcessor      : %i\n",       devprop.maxThreadsPerMultiProcessor);
+    printf("  memPitch                         : %li\n",      devprop.memPitch);
+    printf("  multiProcessorCount              : %i\n",       devprop.multiProcessorCount);
+    printf("  regsPerBlock                     : %i\n",       devprop.regsPerBlock);
+    printf("  warpSize                         : %i\n",       devprop.warpSize);
+    printf("  pciBusID                         : %i\n",       devprop.pciBusID);
+    printf("  pciDeviceID                      : %i\n",       devprop.pciDeviceID);
+    printf("  pciDomainID                      : %i\n",       devprop.pciDomainID);
+    //this is cuda10
+    //printf("  uuid                             : ");
+    //for (int s = 0; s < 16; s++) {
+    //    printf("%#2x ", (unsigned char)devprop.uuid.bytes[s]);
+    //}
+    //printf("\n");
 }
 
 /// Get number of streams.

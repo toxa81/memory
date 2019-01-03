@@ -2,5 +2,10 @@
 
 int main(int argn, char** argv)
 {
-    return 0;
+    int nd = acc::num_devices();
+    printf("number of devices: %i\n", nd);
+    for (int i = 0; i < nd; i++) {
+        acc::print_device_info(i);
+    }
+
 }

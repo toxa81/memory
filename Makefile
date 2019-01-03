@@ -1,2 +1,2 @@
 all:
-	gcc-mp-7 1.cpp -lstdc++
+	CC -D__CUDA 1.cpp
