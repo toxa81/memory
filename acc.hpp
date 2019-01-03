@@ -129,6 +129,16 @@ inline void set_device()
 #endif
 }
 
+/// Get current device ID.
+inline int get_device_id()
+{
+    int id{0};
+#if defined(__CUDA)
+    CALL_CUDA(cudaGetDevice, (&id));
+#endif
+    return id;
+}
+
 #if defined(__CUDA)
 /// Vector of CUDA streams.
 inline std::vector<cudaStream_t>& streams()
