@@ -8,7 +8,5 @@ int main(int argn, char** argv)
         printf("device: %i\n", i);
         acc::print_device_info(i);
     }
-
-    acc::copy(&nd, &nd, 1);
-
+    return 0;
 }

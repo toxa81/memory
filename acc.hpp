@@ -129,6 +129,7 @@ inline void stack_backtrace()
 #endif
 #endif
 
+#if defined(__CUDA) || defined(__ROCM)
 #define CALL_DEVICE_API(func__, args__)                                                                            \
 {                                                                                                                  \
     acc_error_t error;                                                                                             \
@@ -141,6 +142,9 @@ inline void stack_backtrace()
         stack_backtrace();                                                                                         \
     }                                                                                                              \
 }
+#else
+#define CALL_DEVICE_API(func__, args__)
+#endif
 
 namespace acc {
 
@@ -195,9 +199,11 @@ inline size_t get_free_mem()
 inline int num_devices()
 {
     int count{0};
+#if defined(__CUDA) || defined(__ROCM)
     if (P(GetDeviceCount)(&count) != P(Success)) {
         return 0;
     }
+#endif
     return count;
 }
 
@@ -211,6 +217,7 @@ inline void print_device_info(int device_id__)
 
     CALL_DEVICE_API(GetDeviceProperties, (&devprop, device_id__));
 
+#if defined(__CUDA) || defined(__ROCM)
     printf("  name                             : %s\n",       devprop.name);
     printf("  major                            : %i\n",       devprop.major);
     printf("  minor                            : %i\n",       devprop.minor);
@@ -246,6 +253,7 @@ inline void print_device_info(int device_id__)
     //    printf("%#2x ", (unsigned char)devprop.uuid.bytes[s]);
     //}
     //printf("\n");
+#endif
 }
 
 /// Get number of streams.
