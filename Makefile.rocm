@@ -1,0 +1,2 @@
+all:
+	/opt/rocm/hcc/bin/hcc -hc -amdgpu-target=gfx900 -I/opt/rocm/hip/include -D__ROCM  1.cpp  -L/opt/rocm/hip/lib -lhip_hcc -Wl,-rpath,/opt/rocm/hip/lib

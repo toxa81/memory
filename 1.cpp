@@ -9,4 +9,6 @@ int main(int argn, char** argv)
         acc::print_device_info(i);
     }
 
+    acc::copy(&nd, &nd, 1);
+
 }
