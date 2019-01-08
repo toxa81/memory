@@ -1,6 +1,7 @@
 #include "memory.hpp"
 #include <pthread.h>
 #include <omp.h>
+#include <thread>
 
 using namespace sddk;
 
@@ -92,6 +93,34 @@ int main(int argn, char** argv)
         int id = acc::get_device_id();
         printf("omp thread: current device id : %i\n", id);
     }
+
+    std::vector<std::thread> std_threads;
+    for (int i = 0; i < 4; i++) {
+        std_threads.push_back(std::thread([]()
+        {
+            acc::set_device_id(1);
+            int id1 = acc::get_device_id();
+            if (id1 != 1) {
+                printf("wrong device id\n");
+            }
+        }));
+    }
+    for (auto& thread: std_threads) {
+        thread.join();
+    }
+    std_threads.clear();
+
+    for (int i = 0; i < 4; i++) {
+        std_threads.push_back(std::thread([]()
+        {
+            int id = acc::get_device_id();
+            printf("std::thread: current device id : %i\n", id);
+        }));
+    }
+    for (auto& thread: std_threads) {
+        thread.join();
+    }
+    std_threads.clear();
 
     return 0;
 }
