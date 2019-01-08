@@ -388,14 +388,24 @@ inline void deallocate(void* ptr__)
 template <typename T>
 inline T* allocate_host(size_t size__) {
     T* ptr;
+#if defined(__CUDA)
     CALL_DEVICE_API(MallocHost, (&ptr, size__ * sizeof(T)));
+#endif
+#if defined(__ROCM)
+    CALL_DEVICE_API(HostMalloc, (&ptr, size__ * sizeof(T)));
+#endif
     return ptr;
 }
 
 /// Deallocate host memory.
 inline void deallocate_host(void* ptr__)
 {
+#if defined(__CUDA)
     CALL_DEVICE_API(FreeHost, (ptr__));
+#endif
+#if defined(__ROCM)
+    CALL_DEVICE_API(HostFree, (ptr__));
+#endif
 }
 
 #if defined(__CUDA)
