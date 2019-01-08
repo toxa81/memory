@@ -38,7 +38,8 @@
 #include <initializer_list>
 #include <type_traits>
 #include <functional>
-#include "GPU/acc.hpp"
+#include <algorithm>
+#include "acc.hpp"
 
 namespace sddk {
 

@@ -1,2 +1,2 @@
 all:
-	gcc-mp-7 1.cpp
+	gcc-mp-7 -g -O1 1.cpp -lstdc++

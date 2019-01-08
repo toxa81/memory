@@ -162,17 +162,48 @@ inline int get_device_id()
     return id;
 }
 
-/// Vector of CUDA streams.
+/// Vector of device streams.
 inline std::vector<acc_stream_t>& streams()
 {
     static std::vector<acc_stream_t> streams_;
     return streams_;
 }
 
-/// Return a single CUDA stream.
+/// Return a single device stream.
 inline acc_stream_t stream(stream_id sid__)
 {
     return (sid__() == -1) ? NULL : streams()[sid__()];
+}
+
+/// Get number of streams.
+inline int num_streams()
+{
+    return static_cast<int>(streams().size());
+}
+
+/// Create CUDA streams.
+inline void create_streams(int num_streams__)
+{
+    streams() = std::vector<acc_stream_t>(num_streams__);
+
+    //for (int i = 0; i < num_streams; i++) cudaStreamCreateWithFlags(&streams[i], cudaStreamNonBlocking);
+    for (int i = 0; i < num_streams(); i++) {
+        CALL_DEVICE_API(StreamCreate, (&streams()[i]));
+    }
+}
+
+/// Destroy CUDA streams.
+inline void destroy_streams()
+{
+    for (int i = 0; i < num_streams(); i++) {
+        CALL_DEVICE_API(StreamDestroy, (stream(stream_id(i))));
+    }
+}
+
+/// Synchronize a single stream.
+inline void sync_stream(stream_id sid__)
+{
+    CALL_DEVICE_API(StreamSynchronize, (stream(sid__)));
 }
 
 /// Reset device.
@@ -254,37 +285,6 @@ inline void print_device_info(int device_id__)
     //}
     //printf("\n");
 #endif
-}
-
-/// Get number of streams.
-inline int num_streams()
-{
-    return static_cast<int>(streams().size());
-}
-
-/// Create CUDA streams.
-inline void create_streams(int num_streams__)
-{
-    streams() = std::vector<acc_stream_t>(num_streams__);
-
-    //for (int i = 0; i < num_streams; i++) cudaStreamCreateWithFlags(&streams[i], cudaStreamNonBlocking);
-    for (int i = 0; i < num_streams(); i++) {
-        CALL_DEVICE_API(StreamCreate, (&streams()[i]));
-    }
-}
-
-/// Destroy CUDA streams.
-inline void destroy_streams()
-{
-    for (int i = 0; i < num_streams(); i++) {
-        CALL_DEVICE_API(StreamDestroy, (stream(stream_id(i))));
-    }
-}
-
-/// Synchronize a single stream.
-inline void sync_stream(stream_id sid__)
-{
-    CALL_DEVICE_API(StreamSynchronize, (stream(sid__)));
 }
 
 /// Copy memory inside a device.
