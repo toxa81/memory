@@ -1,0 +1,2 @@
+all:
+	gcc -fopenmp -g -O1 -D__CUDA -I/cm/shared/apps/openpower/FutureSystem/cuda/cuda-10.0/include 1.cpp -lstdc++ -L/cm/shared/apps/openpower/FutureSystem/cuda/cuda-10.0/lib64 -lcudart
