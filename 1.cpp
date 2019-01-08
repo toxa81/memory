@@ -6,6 +6,7 @@ using namespace sddk;
 
 void* f1(void* arg)
 {
+    printf("in f1()\n");
     int id = *((int*)arg);
     acc::set_device_id(id);
     int id1 = acc::get_device_id();
@@ -17,6 +18,7 @@ void* f1(void* arg)
 
 void* f2(void* arg)
 {
+    printf("in f2()\n");
     int id = acc::get_device_id();
     printf("pthread: current device id : %i\n", id);
     return nullptr;
@@ -36,37 +38,42 @@ int main(int argn, char** argv)
     //a.copy_to(memory_t::device);
 
 
-    std::vector<pthread_t> threads(10);
+    std::vector<pthread_t> threads(4);
 
     int id{1};
-    for (int i = 0; i < 10; i++) {
+    printf("creating pthreads\n");
+    for (int i = 0; i < 4; i++) {
         if (pthread_create(&threads[i], NULL, f1, &id)) {
             printf("Error creating thread\n");
             return 1;
         }
     }
 
-    for (int i = 0; i < 10; i++) {
+    printf("joining pthreads\n");
+    for (int i = 0; i < 4; i++) {
         if (pthread_join(threads[i], NULL)) {
             printf("Error joining thread\n");
             return 2;
         }
     }
 
-    for (int i = 0; i < 10; i++) {
+    printf("creating pthreads\n");
+    for (int i = 0; i < 4; i++) {
         if (pthread_create(&threads[i], NULL, f2, nullptr)) {
             printf("Error creating thread\n");
             return 1;
         }
     }
 
-    for (int i = 0; i < 10; i++) {
+    printf("joining pthreads\n");
+    for (int i = 0; i < 4; i++) {
         if (pthread_join(threads[i], NULL)) {
             printf("Error joining thread\n");
             return 2;
         }
     }
 
+    printf("1st omp section\n");
     #pragma omp parallel
     {
         #pragma omp critical
@@ -79,6 +86,7 @@ int main(int argn, char** argv)
         }
     }
 
+    printf("2nd omp section\n");
     #pragma omp parallel
     {
         int id = acc::get_device_id();
