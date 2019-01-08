@@ -1,3 +1,3 @@
 all:
-	#/opt/rocm/hcc/bin/hcc -hc -fopenmp -amdgpu-target=gfx900 -I/opt/rocm/hip/include -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/ -D__ROCM 1.cpp  -L/opt/rocm/hip/lib -lhip_hcc -Wl,-rpath,/opt/rocm/hip/lib -L/usr/lib/gcc/x86_64-redhat-linux/4.8.5/ -lgomp
-	/opt/rocm/hcc/bin/hcc -fopenmp 2.cpp -lstdc++
+	/opt/rocm/hcc/bin/hcc -hc -fopenmp -amdgpu-target=gfx900 -I/opt/rocm/hip/include -I/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/include -D__ROCM 1.cpp  -L/opt/rocm/hip/lib -lhip_hcc -Wl,-rpath,/opt/rocm/hip/lib -L/opt/rh/llvm-toolset-7/root/usr/lib64 -Wl,-rpath,/opt/rh/llvm-toolset-7/root/usr/lib64
+	#/opt/rocm/hcc/bin/hcc -fopenmp -I/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/include 2.cpp -L/opt/rh/llvm-toolset-7/root/usr/lib64 -Wl,-rpath,/opt/rh/llvm-toolset-7/root/usr/lib64
