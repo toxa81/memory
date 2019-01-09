@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <omp.h>
 #include <thread>
-#include "rocblas.h"
+#include "rocblas_interface.h"
 
 using namespace sddk;
 
@@ -37,36 +37,34 @@ int main(int argn, char** argv)
     //}
     int n{4096};
 
-    mdarray<float, 2> a(n, n);
-    mdarray<float, 2> b(n, n);
-    mdarray<float, 2> c(n, n);
+    mdarray<double, 2> a(n, n);
+    mdarray<double, 2> b(n, n);
+    mdarray<double, 2> c(n, n);
 
     a.allocate(memory_t::device);
     b.allocate(memory_t::device);
     c.allocate(memory_t::device);
 
-    rocblas_handle handle;
-    rocblas_create_handle(&handle);
+    rocblas::create_stream_handles();
 
-    float alpha{1};
-    float beta{0};
+    double alpha{1};
+    double beta{0};
 
     double t = -omp_get_wtime();
-    rocblas_sgemm(handle, rocblas_operation_none, rocblas_operation_none, n, n, n, &alpha,
-                  a.at(memory_t::device), a.ld(), b.at(memory_t::device), b.ld(), &beta, c.at(memory_t::device), c.ld());
+    rocblas::dgemm('n', 'n', n, n, n, &alpha, a.at(memory_t::device), a.ld(), b.at(memory_t::device), b.ld(), &beta,
+                   c.at(memory_t::device), c.ld(), stream_id(-1));
     
     c.copy_to(memory_t::host);
     t += omp_get_wtime();
 
-    double t = -omp_get_wtime();
-    rocblas_sgemm(handle, rocblas_operation_none, rocblas_operation_none, n, n, n, &alpha,
-                  a.at(memory_t::device), a.ld(), b.at(memory_t::device), b.ld(), &beta, c.at(memory_t::device), c.ld());
-    
+    t = -omp_get_wtime();
+    rocblas::dgemm('n', 'n', n, n, n, &alpha, a.at(memory_t::device), a.ld(), b.at(memory_t::device), b.ld(), &beta,
+                   c.at(memory_t::device), c.ld(), stream_id(-1));
     c.copy_to(memory_t::host);
     t += omp_get_wtime();
 
     printf("performance : %f GFlops\n", 2e-9 * n * n * n / t);
 
-    rocblas_destroy_handle(handle);
+    rocblas::destroy_stream_handles();
 
 }

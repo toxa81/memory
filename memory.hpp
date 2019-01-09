@@ -232,13 +232,16 @@ class memory_t_deleter_base
     {
       public:
         virtual void free(void* ptr__) = 0;
+        virtual ~memory_t_deleter_base_impl()
+        {
+        }
     };
     std::unique_ptr<memory_t_deleter_base_impl> impl_;
 
   public:
-    memory_t_deleter_base()
-    {
-    }
+    //memory_t_deleter_base()
+    //{
+    //}
     //virtual ~memory_t_deleter_base();
 
     void operator()(void* ptr__)
@@ -272,9 +275,9 @@ class memory_t_deleter: public memory_t_deleter_base
     {
         impl_ = std::unique_ptr<memory_t_deleter_base_impl>(new memory_t_deleter_impl(M__));
     }
-    ~memory_t_deleter()
-    {
-    }
+    //~memory_t_deleter()
+    //{
+    //}
 };
 
 /// Deleter for the allocated memory pointer from a given memory pool.
@@ -298,9 +301,9 @@ class memory_pool_deleter: public memory_t_deleter_base
     {
         impl_ = std::unique_ptr<memory_t_deleter_base_impl>(new memory_pool_deleter_impl(mp__));
     }
-    ~memory_pool_deleter()
-    {
-    }
+    //~memory_pool_deleter()
+    //{
+    //}
 };
 
 template <typename T>
