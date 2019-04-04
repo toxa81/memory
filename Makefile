@@ -1,2 +1,2 @@
 all:
-	CC -D__CUDA 1.cpp
+	gcc -std=c++11 -O3 -DNDEBUG mp_example.cpp -lstdc++
